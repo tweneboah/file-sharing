@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
 import { 
   FiUploadCloud, 
   FiShare2, 
@@ -258,8 +258,8 @@ export default function HomePage() {
               </Link>
             ) : (
               <>
-                <Link
-                  href="/upload"
+                <button
+                  onClick={() => signIn('google')}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -272,20 +272,20 @@ export default function HomePage() {
                     fontSize: '1.25rem',
                     borderRadius: '16px',
                     transition: 'all 0.3s ease',
-                    textDecoration: 'none',
                     boxShadow: '0 8px 30px rgba(255, 107, 157, 0.4), 0 0 40px rgba(194, 57, 179, 0.3)',
                     border: '3px solid rgba(255, 255, 255, 0.5)',
                     textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
                     textTransform: 'uppercase',
-                    letterSpacing: '1px'
+                    letterSpacing: '1px',
+                    cursor: 'pointer'
                   }}
                   className="group hover:scale-110 hover:shadow-2xl"
                 >
                   <FiZap style={{ fontSize: '1.75rem' }} className="group-hover:animate-pulse" />
                   Get Started
-                </Link>
-                <Link
-                  href="/files"
+                </button>
+                <button
+                  onClick={() => signIn('google')}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -299,16 +299,16 @@ export default function HomePage() {
                     borderRadius: '16px',
                     border: '3px solid rgba(255, 255, 255, 0.6)',
                     transition: 'all 0.3s ease',
-                    textDecoration: 'none',
                     boxShadow: '0 8px 30px rgba(255, 215, 0, 0.4)',
                     textTransform: 'uppercase',
-                    letterSpacing: '1px'
+                    letterSpacing: '1px',
+                    cursor: 'pointer'
                   }}
                   className="hover:scale-110 hover:shadow-2xl"
                 >
                   <FiCloud style={{ fontSize: '1.75rem' }} />
                   View Files
-                </Link>
+                </button>
               </>
             )}
           </div>

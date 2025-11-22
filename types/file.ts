@@ -23,3 +23,4 @@ export interface FileWithDownloadUrl extends FileMetadata {
 
 export type FileType = 'image' | 'video' | 'audio' | 'document' | 'archive' | 'all';
 
+

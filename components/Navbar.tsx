@@ -280,24 +280,6 @@ export default function Navbar() {
                 >
                   About
                 </Link>
-
-                <Link
-                  href="/pricing"
-                  style={{
-                    padding: '0.75rem 1.5rem',
-                    borderRadius: '14px',
-                    color: '#FFFFFF',
-                    fontWeight: 700,
-                    fontSize: '1rem',
-                    transition: 'all 0.3s ease',
-                    textDecoration: 'none',
-                    textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
-                    border: '2px solid transparent'
-                  }}
-                  className="hover:bg-white/25 hover:border-white/40 hover:scale-105"
-                >
-                  Pricing
-                </Link>
                 
                 <button
                   onClick={() => signIn('google')}
@@ -479,24 +461,6 @@ export default function Navbar() {
                   }}
                 >
                   About
-                </Link>
-
-                <Link 
-                  href="/pricing" 
-                  onClick={() => setMobileMenuOpen(false)} 
-                  style={{
-                    padding: '1rem',
-                    borderRadius: '12px',
-                    background: 'rgba(255, 255, 255, 0.25)',
-                    color: '#FFFFFF',
-                    fontWeight: 700,
-                    textDecoration: 'none',
-                    border: '2px solid rgba(255, 255, 255, 0.4)',
-                    textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
-                    textAlign: 'center'
-                  }}
-                >
-                  Pricing
                 </Link>
                 
                 <button
