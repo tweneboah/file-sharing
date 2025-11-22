@@ -1,0 +1,370 @@
+---
+alwaysApply: true
+---
+🔥 Perfect — let’s upgrade the entire Cursor AI prompt to use:
+
+✅ **Next.js 15 (App Router)**
+✅ **MongoDB + Mongoose** (file metadata database)
+✅ **Cloudinary** (file storage & signed URLs)
+✅ **NextAuth** (auth)
+
+No Supabase.
+No Postgres.
+No Storage buckets.
+
+This version is clean, scalable, and easier to manage.
+
+Here is the **complete Cursor AI prompt** — copy/paste into Cursor and it will scaffold EVERYTHING.
+
+---
+
+# 🚀 **Cursor AI — Build a Full File Sharing Platform (Next.js + MongoDB + Cloudinary)**
+
+You are my expert full-stack engineer.
+Build a modern **file-sharing platform** using:
+
+* **Next.js 15 App Router**
+* **TypeScript**
+* **Tailwind CSS**
+* **MongoDB + Mongoose**
+* **Cloudinary** (upload, preview, signed download URLs)
+* **NextAuth.js** (Google + Email login)
+* **Zod**
+* **React Dropzone**
+* **Lucide icons**
+
+Follow everything below exactly.
+
+---
+
+# 1️⃣ **Project Setup**
+
+Initialize a Next.js 15 App Router project.
+
+Install:
+
+```
+npm install mongoose cloudinary next-auth zod react-dropzone lucide-react axios
+npm install @types/react-dropzone -D
+```
+
+Setup `.env.local`:
+
+```
+MONGODB_URI=
+NEXTAUTH_SECRET=
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+```
+
+---
+
+# 2️⃣ **Folder Structure**
+
+Create this structure:
+
+```
+app/
+  layout.tsx
+  page.tsx
+  upload/page.tsx
+  files/page.tsx
+  file/[id]/page.tsx
+  api/
+    upload/route.ts
+    file/route.ts
+    delete/route.ts
+    auth/[...nextauth]/route.ts
+
+components/
+  Navbar.tsx
+  DropzoneUploader.tsx
+  FileCard.tsx
+
+lib/
+  db.ts
+  cloudinary.ts
+  authOptions.ts
+  utils.ts
+
+models/
+  File.ts
+
+types/
+  file.ts
+```
+
+---
+
+# 3️⃣ **Core Features to Build**
+
+## **A) File Upload → Cloudinary**
+
+Workflow:
+
+1. User drags file into Dropzone
+2. Client sends metadata → `/api/upload`
+3. Server validates with Zod
+4. Upload file to **Cloudinary** using Cloudinary SDK
+5. Save metadata in MongoDB
+6. Return a **shareable URL**
+
+---
+
+## ✔ Cloudinary Upload Requirements
+
+* Use `cloudinary.uploader.upload_stream`
+
+* Store in folder: `"fileshare/uploads"`
+
+* Restrict file types:
+
+  * pdf, docx
+  * images
+  * audio
+  * video
+  * zip
+
+* Restrict max size: **100MB**
+
+* Save Cloudinary response values:
+
+  * `public_id`
+  * `secure_url`
+  * `bytes`
+  * `format`
+  * `resource_type`
+
+---
+
+## **B) Public Download Page (`/file/[id]`)**
+
+Build a polished public page showing:
+
+* File name
+
+* Icon based on type
+
+* Preview for:
+
+  * images
+  * videos
+  * pdf
+
+* Download button
+
+* Use Cloudinary’s **signed URLs** (valid for 10 minutes)
+
+---
+
+## **C) User Dashboard (`/files`)**
+
+Show list of files uploaded by the logged-in user.
+
+Each `<FileCard />` shows:
+
+* Name
+* Type
+* Size
+* Date
+* Preview thumbnail (from Cloudinary transformation)
+* Buttons:
+
+  * Copy link
+  * Download
+  * Delete
+
+Filters:
+
+* Images
+* Documents
+* Videos
+* Audio
+* All
+
+---
+
+# 4️⃣ **Database Schema (Mongoose)**
+
+Create `models/File.ts`:
+
+```ts
+import { Schema, model, models } from "mongoose";
+
+const FileSchema = new Schema({
+  fileName: String,
+  fileSize: Number,
+  mimeType: String,
+  cloudinaryPublicId: String,
+  cloudinaryUrl: String,
+  resourceType: String,
+  userId: String,
+  createdAt: { type: Date, default: Date.now }
+});
+
+export default models.File || model("File", FileSchema);
+```
+
+---
+
+# 5️⃣ **API Endpoints**
+
+## **1. `/api/upload` (POST)**
+
+Tasks:
+
+* Validate with Zod
+* Upload to Cloudinary
+* Save metadata to MongoDB
+* Return `{ id, shareUrl }`
+
+---
+
+## **2. `/api/file` (GET)**
+
+Return:
+
+* file metadata
+* a **signed download URL** created with:
+
+```
+cloudinary.utils.private_download_url(publicId, format, { expires_at: ... })
+```
+
+---
+
+## **3. `/api/delete` (DELETE)**
+
+Tasks:
+
+* Validate user owns file
+* Remove from Cloudinary
+  `cloudinary.uploader.destroy(publicId)`
+* Remove from MongoDB
+* Return success message
+
+---
+
+# 6️⃣ **Authentication (NextAuth)**
+
+Configure:
+
+* Google Provider
+* Email Provider (magic link)
+
+Protect these routes/pages:
+
+* `/upload`
+* `/files`
+
+Public pages:
+
+* `/`
+* `/file/[id]`
+
+Create `lib/authOptions.ts`
+
+---
+
+# 7️⃣ **UI / UX Requirements**
+
+### **Home Page**
+
+* "Share files instantly" hero
+* big gradient background
+* Buttons: Upload | Sign In
+* 3-step explanation:
+
+  1. Upload
+  2. Share
+  3. Download
+
+---
+
+### **Upload Page**
+
+* Large drag-and-drop box
+* Upload progress bar
+* Success screen with share link
+* Beautiful animations
+
+---
+
+### **Files Dashboard**
+
+* Grid layout
+* Preview thumbnails
+* Responsive
+* Filters
+* Click-to-copy links
+* Delete confirmation modal
+
+---
+
+### **Public File Page**
+
+* Clean centered layout
+* Big file icon
+* Preview (image/video/pdf)
+* Countdown for signed URLs
+* Download button
+
+---
+
+# 8️⃣ **Helper Utilities**
+
+Inside `lib/utils.ts` include:
+
+* Format file size
+* Map mime type → icon
+* Build public file URL
+* Catch async errors
+
+---
+
+# 9️⃣ **Nice Bonuses (Build Them Too)**
+
+* Limit each user to **3GB total storage**
+* Show progress bar during upload
+* Show file type badges
+* Add dark mode (class strategy)
+* Mobile-first responsive
+* Cloudinary transformations:
+
+  * thumbnails
+  * optimized previews
+
+---
+
+# 🔟 **Final Delivery Rules**
+
+When generating code:
+
+* No placeholders — real code
+* End-to-end working upload → save → share → download
+* Fully typed TypeScript
+* Each API route must include:
+
+  * Zod
+  * error handling
+  * proper status codes
+* Include comments explaining key parts
+* Ensure MongoDB connection is stable
+* Ensure Cloudinary uses secure URLs
+* Ensure signed URLs work
+* UI must be polished and clean
+* Make sure delete logic is safe
+
+---
+
+# 🎉 END OF PROMPT
+
+Build everything step by step.
+Ask me only if something is unclear before writing files.
+
+---
+
+
