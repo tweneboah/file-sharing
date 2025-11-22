@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 // MongoDB connection with caching for serverless environments
 declare global {
   var mongoose: {
-    conn: typeof mongoose | null;
-    promise: Promise<typeof mongoose> | null;
+    conn: any | null;
+    promise: Promise<any> | null;
   };
 }
 
@@ -54,4 +54,5 @@ async function connectDB() {
 }
 
 export default connectDB;
+
 

@@ -1,5 +1,3 @@
-import { type ClassValue, clsx } from "clsx";
-
 /**
  * Format file size from bytes to human-readable format
  * @param bytes - File size in bytes
@@ -97,4 +95,5 @@ export function isStorageLimitExceeded(totalBytes: number): boolean {
   const MAX_STORAGE = 3 * 1024 * 1024 * 1024; // 3GB in bytes
   return totalBytes >= MAX_STORAGE;
 }
+
 
